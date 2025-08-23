@@ -4,6 +4,6 @@ import { parse } from "../utils/parse";
 describe("Tests parsing", () => {
     test("Parses simple HTML string", () => {
         const htmlString = `<div>{{myString}}</div>`;
-        expect(parse(htmlString)).toBe();
+        expect(parse(htmlString)).toBe(true);
     });
 });

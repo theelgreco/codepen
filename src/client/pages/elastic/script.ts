@@ -14,6 +14,7 @@ function drawSvg(height: number) {
 elastic.setAttribute("d", drawSvg(0));
 
 const throttledSetAttr = throttle((e: WheelEvent) => {
+    // @ts-ignore
     elastic.setAttribute("d", drawSvg(e.wheelDeltaY * 0.1));
 }, 10);
 
