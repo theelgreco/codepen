@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="style.css" />
+        <title>waves</title>
+    </head>
+    <body>
+        <div class="canvas-container">
+            <canvas id="canvas"></canvas>
+        </div>
+        <div class="controls">
+            <div class="control">
+                <small>FREQUENCY</small>
+                <div class="knob" id="freq"></div>
+                <input type="number" id="frequency" hidden />
+            </div>
+            <div class="control">
+                <small>AMPLITUDE</small>
+                <div class="knob" id="amp"></div>
+                <input type="number" id="amplitude" hidden />
+            </div>
+        </div>
+        <script type="module" src="script.ts"></script>
+    </body>
+</html>

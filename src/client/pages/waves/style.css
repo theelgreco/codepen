@@ -1,0 +1,90 @@
+@import url("@/assets/fonts.css");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    max-width: 100vw;
+    max-height: 100vh;
+    overflow: hidden;
+    overscroll-behavior: none;
+    background-color: rgb(28, 28, 28);
+    /* background-color: rgb(110, 76, 17); */
+    color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+.canvas-container {
+    padding: 14px;
+}
+
+canvas {
+    opacity: 0.8;
+
+    background-color: rgba(30, 28, 247, 1);
+    background-image: linear-gradient(#4e65cf 1.2000000000000002px, transparent 1.2000000000000002px),
+        linear-gradient(to right, #4e65cf 1.2000000000000002px, rgba(30, 28, 247, 1) 1.2000000000000002px);
+    background-size: 24px 24px;
+    border-radius: 10px;
+    box-shadow: inset 0 10px 20px 0px rgb(3, 3, 61);
+
+    background-color: rgba(65, 97, 19, 1);
+    opacity: 0.8;
+    background-image: linear-gradient(rgba(164, 207, 78, 0.1) 1.2000000000000002px, transparent 1.2000000000000002px),
+        linear-gradient(to right, rgba(164, 207, 78, 0.1) 1.2000000000000002px, rgba(65, 97, 19, 1) 1.2000000000000002px);
+    background-size: 24px 24px;
+    box-shadow: inset 0 10px 20px 0px rgb(53, 61, 3);
+}
+
+.controls {
+    display: flex;
+    gap: 10rem;
+    width: 100%;
+    height: 100%;
+    justify-content: space-evenly;
+    align-items: center;
+    /* background-color: rgb(218, 177, 100); */
+    /* box-shadow: inset 0 10px 20px 5px rgb(67, 44, 3); */
+    background-color: rgb(29, 29, 29);
+    box-shadow: inset 0 10px 20px 5px rgba(2, 1, 0, 0.42);
+}
+
+.control {
+    color: rgb(199, 199, 199);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    user-select: none;
+    /* flex-grow: 1; */
+    /* color: #132502; */
+}
+
+.knob {
+    width: 100px;
+    aspect-ratio: 1;
+    border-radius: 9999px;
+    background-color: rgb(29, 29, 29);
+    box-shadow: 0 3px 16px 0 black, inset 0 4px 20px 0 rgb(42, 42, 42);
+    outline: 2px solid rgba(0, 0, 0, 0.076);
+    outline-offset: 10px;
+    cursor: pointer;
+    position: relative;
+}
+
+.knob::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 10px;
+    width: 1px;
+    background-color: rgb(144, 144, 144);
+}

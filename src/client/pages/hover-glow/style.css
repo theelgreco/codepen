@@ -1,0 +1,49 @@
+@import url("@/assets/fonts.css");
+
+:root {
+    --gap: 8px;
+    --x: 0px;
+    --y: 0px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+    color: white;
+    display: grid;
+    place-items: center;
+}
+
+.container {
+    width: 600px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap);
+}
+
+.card {
+    width: 5px;
+    aspect-ratio: 1;
+    position: relative;
+    background: rgb(7, 7, 7);
+    padding: 1px;
+    background-attachment: fixed;
+    background-image: radial-gradient(circle at var(--x, 0) var(--y, 0), hsl(0 0% 100% / 0.175), hsl(0 0% 100% / 0.0125) 10rem);
+}
+
+.card::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    background-attachment: fixed;
+    background-image: radial-gradient(circle at var(--x, 0) var(--y, 0), hsl(0 0% 100% / 0.75), transparent 5rem);
+    pointer-events: none;
+    z-index: -1;
+}

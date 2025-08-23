@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "target": "ESNext",
+        "module": "ESNext",
+        "baseUrl": ".",
+        "strict": true,
+        "paths": {
+            "@/*": ["src/client/*"]
+        }
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules", "dist"],
+    "typeAcquisition": {
+        "enable": false
+    }
+}

@@ -1,0 +1,37 @@
+{
+    "name": "codepen",
+    "type": "module",
+    "version": "1.0.0",
+    "scripts": {
+        "add-page": "bash scripts/add-page.sh",
+        "delete-page": "bash scripts/delete-page.sh",
+        "dev": "nodemon",
+        "build:server": "tsc -p src/server/tsconfig.json && tsc-alias -p src/server/tsconfig.json",
+        "build:client": "tsc --noEmit -p src/client/tsconfig.json && vite build",
+        "build": "rm -rf dist && npm run build:server && npm run build:client",
+        "start": "NODE_ENV=production node dist/server/index.js",
+        "clean": "rm -rf dist node_modules && npm install",
+        "test": "vitest"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "dependencies": {
+        "@tailwindcss/vite": "^4.1.8",
+        "express": "^5.1.0",
+        "tailwindcss": "^4.1.8",
+        "tsc-alias": "^1.8.16",
+        "vite-express": "^0.21.1"
+    },
+    "devDependencies": {
+        "@types/express": "^5.0.1",
+        "dotenv": "^16.5.0",
+        "globby": "^14.1.0",
+        "nodemon": "^3.1.10",
+        "tsx": "^4.19.4",
+        "typescript": "^5.8.3",
+        "vite": "^6.3.5",
+        "vitest": "^3.2.4"
+    }
+}

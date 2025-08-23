@@ -1,0 +1,26 @@
+@import url("@/assets/fonts.css");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: black;
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    place-items: center;
+}
+
+canvas {
+    border: 1px solid #0ed66e70;
+    border-radius: 10px;
+    transition: scale 0.2s ease-out;
+    /* box-shadow: 0 0 20px 5px #0ed66e40; */
+}
+
+.ran {
+    color: #03fe03;
+}

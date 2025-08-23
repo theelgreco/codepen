@@ -1,0 +1,82 @@
+@import url("@/assets/fonts.css");
+
+:root {
+    --x: 100px;
+    --y: 100px;
+    --menu-x: 50%;
+    --menu-y: 50%;
+    --delay: 300;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+    color: white;
+    display: grid;
+    place-items: center;
+    overscroll-behavior: none;
+}
+
+body::after {
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 100%;
+    /* background: radial-gradient(circle 500px at var(--x) var(--y), transparent 0%, rgb(0, 0, 0) 30%); */
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.menu {
+    position: relative;
+    display: flex;
+    min-width: 300px;
+    overflow: hidden;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+}
+
+.menu::after {
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at var(--menu-x) var(--menu-y), transparent 0%, black 55%);
+    pointer-events: none;
+}
+
+.menu-item {
+    position: absolute;
+    user-select: none;
+    /* transition: all 0.1s cubic-bezier(0.64, -0.15, 0.67, 1.56); */
+    transition: top 300ms ease-in-out;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -25%);
+    background-color: black;
+}
+
+.menu-item.current {
+    font-weight: 1000;
+}
+
+.menu-item .text {
+    transition: font-weight 0.1s ease-in;
+    cursor: pointer;
+}
+
+.menu-item .text:hover {
+    font-weight: 1000;
+}

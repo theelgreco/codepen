@@ -1,0 +1,19 @@
+/* This type checks the client files during development and before building. Vite then actually bundles the client files. */
+{
+    "compilerOptions": {
+        "target": "ES2020",
+        "module": "ESNext",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "moduleResolution": "node",
+        "types": ["vitest"],
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["*"]
+        },
+        "noEmit": true // Means that files won't be compiled
+    },
+    "include": ["**/*"],
+    "exclude": ["node_modules", "dist"]
+}

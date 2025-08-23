@@ -1,0 +1,43 @@
+@import url("@/assets/fonts.css");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: grid;
+    place-items: center;
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+    color: white;
+}
+
+button {
+    border: none;
+    outline: none;
+}
+
+button.futuristic {
+    position: relative;
+    padding-inline: 2rem;
+    padding-block: 1rem;
+    border-radius: 9999px;
+    outline: 1px solid black;
+    z-index: 10;
+}
+
+button.futuristic::before {
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 10px;
+    height: 100%;
+    border-top-left-radius: 9999px;
+    border-bottom-left-radius: 9999px;
+    background-color: wheat;
+    z-index: 0;
+}
