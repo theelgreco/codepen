@@ -19,10 +19,13 @@
     "description": "",
     "dependencies": {
         "@tailwindcss/vite": "^4.1.8",
+        "@vitejs/plugin-vue": "^6.0.1",
+        "@vueuse/core": "^14.0.0",
         "express": "^5.1.0",
         "tailwindcss": "^4.1.8",
         "tsc-alias": "^1.8.16",
-        "vite-express": "^0.21.1"
+        "vite-express": "^0.21.1",
+        "vue": "^3.5.22"
     },
     "devDependencies": {
         "@types/express": "^5.0.1",
