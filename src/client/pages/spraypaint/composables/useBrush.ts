@@ -7,7 +7,7 @@ export type UseBrushOptions = { minBrushSize: number; maxBrushSize: number; init
 
 export type Brush = { width: number; height: number; cx: number; cy: number; r: number; x: number; y: number };
 
-export type BrushStroke = Brush & { timestamp: number; fill: string; stroke: string };
+export type BrushStroke = Brush & { id: string; timestamp: number; fill: string; stroke: string };
 
 export function useBrush(
     { minBrushSize, maxBrushSize, initialBrushSize }: UseBrushOptions = { minBrushSize: 0, maxBrushSize: Infinity, initialBrushSize: 35 }
@@ -45,12 +45,22 @@ export function useBrush(
     }
 
     function addStroke() {
-        strokes.value.push({ ...brush.value, timestamp: performance.now(), fill: fill.value, stroke: stroke.value });
+        strokes.value.push({
+            ...brush.value,
+            id: crypto.randomUUID(),
+            timestamp: performance.now(),
+            fill: fill.value,
+            stroke: stroke.value,
+        });
+    }
+
+    function undoStroke() {
+        strokes.value = strokes.value.toSpliced(-1, 1);
     }
 
     watch(deltaY, (newValue) => {
         brushSize.value = clamp(minBrushSize, brushSize.value + newValue, maxBrushSize);
     });
 
-    return { brush, strokes, brushSize, setBrushSize, addStroke };
+    return { brush, strokes, brushSize, setBrushSize, addStroke, undoStroke };
 }
