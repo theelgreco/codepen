@@ -19,7 +19,7 @@ export function useBrush(
 
     const fill = ref("white");
 
-    const stroke = ref("black");
+    const stroke = ref("transparent");
 
     const brush = computed<Brush>(() => {
         const coords = brushSize.value + 15;

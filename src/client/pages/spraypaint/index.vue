@@ -9,7 +9,7 @@ import { watch } from "vue";
 
 const { strokes, addStroke, undoStroke } = useBrush();
 const { pressed } = useMousePressed();
-const { meta, z } = useMagicKeys();
+const { ctrl_z } = useMagicKeys();
 
 function handleDraw() {
     if (pressed.value) {
@@ -17,8 +17,10 @@ function handleDraw() {
     }
 }
 
-watch([meta, z], ([newMeta, newZ]) => {
-    if (newMeta && newZ) undoStroke();
+watch(ctrl_z, (v) => {
+    if (v) {
+        undoStroke();
+    }
 });
 </script>
 
