@@ -182,7 +182,6 @@ class Knob {
             if (y > window.innerHeight) y -= window.innerHeight;
 
             cursor.style.top = `${y}px`;
-            // cursor.style.left = `${e.x}px`;
         }
 
         console.log(e.x);
