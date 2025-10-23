@@ -1,6 +1,7 @@
 import { DrawCanvas } from "@/classes/DrawCanvas";
 import { TimingFunctions } from "@/classes/TimingFunctions";
 import { COLORS } from "@/types/Colors";
+import { clamp } from "lodash";
 
 class WaveCanvas extends DrawCanvas {
     WAVELENGTH = 100;
@@ -46,9 +47,10 @@ class WaveCanvas extends DrawCanvas {
     }
 
     // Method to update parameters and trigger animation
-    updateParameters(newAmplitude: number, newFrequency: number) {
-        this.targetAmplitude = newAmplitude;
-        this.targetFrequency = newFrequency;
+    updateParameters({ AMPLITUDE, FREQUENCY }: { AMPLITUDE?: number; FREQUENCY?: number }) {
+        if (AMPLITUDE !== undefined) this.targetAmplitude = AMPLITUDE;
+        if (FREQUENCY !== undefined) this.targetFrequency = FREQUENCY;
+
         this.calculatePoints(); // Recalculate target points
         this.animate(); // Start animation
     }
@@ -73,7 +75,7 @@ class WaveCanvas extends DrawCanvas {
 
     animate() {
         let startTime: number | null = null;
-        const duration = 800; // Animation duration in ms
+        const duration = 0; // Animation duration in ms
 
         const loop = (timestamp: number) => {
             if (!startTime) startTime = timestamp;
@@ -119,23 +121,44 @@ class WaveCanvas extends DrawCanvas {
     }
 }
 
+class Knob {
+    element: HTMLDivElement;
+    active: boolean = false;
+    type: "FREQUENCY" | "AMPLITUDE";
+
+    constructor(id: string, type: "FREQUENCY" | "AMPLITUDE") {
+        this.element = document.getElementById(id) as HTMLDivElement;
+        this.type = type;
+        this.element.addEventListener("wheel", this.handleMouseWheel.bind(this));
+        this.element.style.setProperty("--rotation", `${clamp(waveCanvas[this.type], 0, 360)}deg`);
+    }
+
+    handleMouseWheel(e: WheelEvent) {
+        const newValue = waveCanvas[this.type] + e.deltaY * 0.1;
+        const clampedValue = clamp(newValue, 1, 360);
+        this.element.style.setProperty("--rotation", `${clampedValue}deg`);
+        waveCanvas.updateParameters({ [this.type]: clampedValue });
+    }
+}
+
 const waveCanvas = new WaveCanvas("canvas");
 waveCanvas.animate();
 
 const frequency: HTMLInputElement = document.getElementById("frequency") as HTMLInputElement;
 frequency.value = waveCanvas.FREQUENCY.toString();
+frequency.addEventListener("change", updateValues);
 
 const amplitude: HTMLInputElement = document.getElementById("amplitude") as HTMLInputElement;
 amplitude.value = waveCanvas.AMPLITUDE.toString();
-
 amplitude.addEventListener("change", updateValues);
 
-frequency.addEventListener("change", updateValues);
+const frequencyKnob = new Knob("freq", "FREQUENCY");
+const amplitudeKnob = new Knob("amp", "AMPLITUDE");
 
 function updateValues() {
-    const newAmplitude = parseFloat(amplitude.value);
-    const newFrequency = parseFloat(frequency.value);
-    waveCanvas.updateParameters(newAmplitude, newFrequency);
+    const AMPLITUDE = parseFloat(amplitude.value);
+    const FREQUENCY = parseFloat(frequency.value);
+    waveCanvas.updateParameters({ AMPLITUDE, FREQUENCY });
 }
 
 function randomise() {
@@ -144,15 +167,6 @@ function randomise() {
     updateValues();
 }
 
-setInterval(() => {
-    randomise();
-}, 1600);
-
-class Knob {
-    element: HTMLDivElement;
-    active: boolean = false;
-
-    constructor(id: string) {
-        this.element = document.getElementById(id) as HTMLDivElement;
-    }
-}
+// setInterval(() => {
+//     randomise();
+// }, 1600);
