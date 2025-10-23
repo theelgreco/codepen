@@ -3,15 +3,13 @@ import { useMouseWheel } from ".";
 import { clamp } from "lodash";
 import { useMouse } from "@vueuse/core";
 
-export type UseBrushOptions = { minBrushSize: number; maxBrushSize: number; initialBrushSize: number };
+export type UseBrushOptions = { minBrushSize?: number; maxBrushSize?: number; initialBrushSize?: number };
 
 export type Brush = { width: number; height: number; cx: number; cy: number; r: number; x: number; y: number };
 
 export type BrushStroke = Brush & { id: string; timestamp: number; fill: string; stroke: string };
 
-export function useBrush(
-    { minBrushSize, maxBrushSize, initialBrushSize }: UseBrushOptions = { minBrushSize: 0, maxBrushSize: Infinity, initialBrushSize: 35 }
-) {
+export function useBrush({ minBrushSize = 10, maxBrushSize = 300, initialBrushSize = 30 }: UseBrushOptions = {}) {
     const { x: mouseX, y: mouseY } = useMouse();
     const { deltaY } = useMouseWheel();
 
@@ -59,7 +57,8 @@ export function useBrush(
     }
 
     watch(deltaY, (newValue) => {
-        brushSize.value = Math.round(clamp(minBrushSize, brushSize.value + newValue, maxBrushSize));
+        console.log(maxBrushSize);
+        brushSize.value = Math.round(clamp(brushSize.value + newValue, minBrushSize, maxBrushSize));
     });
 
     return { brush, strokes, brushSize, setBrushSize, addStroke, undoStroke };
