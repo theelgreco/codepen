@@ -59,7 +59,7 @@ export function useBrush(
     }
 
     watch(deltaY, (newValue) => {
-        brushSize.value = clamp(minBrushSize, brushSize.value + newValue, maxBrushSize);
+        brushSize.value = Math.round(clamp(minBrushSize, brushSize.value + newValue, maxBrushSize));
     });
 
     return { brush, strokes, brushSize, setBrushSize, addStroke, undoStroke };
