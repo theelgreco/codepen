@@ -154,6 +154,11 @@ class Knob {
         document.body.requestPointerLock();
         document.addEventListener("mousemove", this.boundMouseMove);
         document.addEventListener("mouseup", this.boundMouseUp);
+
+        const cursor = document.getElementById("cursor") as HTMLDivElement;
+        cursor.style.visibility = "visible";
+        cursor.style.top = `${e.y}px`;
+        cursor.style.left = `${e.x}px`;
     }
 
     handleMouseUp() {
@@ -163,8 +168,7 @@ class Knob {
         document.removeEventListener("mouseup", this.boundMouseUp);
 
         const cursor = document.getElementById("cursor") as HTMLDivElement;
-        cursor.style.top = ``;
-        cursor.style.left = ``;
+        cursor.style.visibility = "hidden";
     }
 
     handleMouseMove(e: MouseEvent) {
@@ -177,15 +181,12 @@ class Knob {
             let y = parseFloat(cursor.style.top);
             y += e.movementY;
 
-            // // Wrap around the screen edges
+            // Wrap around the screen edges
             if (y < 0) y += window.innerHeight;
             if (y > window.innerHeight) y -= window.innerHeight;
 
             cursor.style.top = `${y}px`;
         }
-
-        console.log(e.x);
-        console.log(e.movementY);
 
         const newValue = waveCanvas[this.type] + e.movementY * -1; // multiplying by -1 inverts the movement direction;
         const clampedValue = clamp(newValue, 1, 360);
