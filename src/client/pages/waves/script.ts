@@ -126,8 +126,6 @@ class Knob {
     active: boolean = false;
     type: "FREQUENCY" | "AMPLITUDE";
 
-    previousY: number = 0;
-
     // Store bound methods to maintain same function reference
     private boundMouseMove: (e: MouseEvent) => void;
     private boundMouseUp: (e: MouseEvent) => void;
@@ -152,29 +150,48 @@ class Knob {
     }
 
     handleMouseDown(e: MouseEvent) {
-        this.previousY = e.y;
         this.active = true;
+        document.body.requestPointerLock();
         document.addEventListener("mousemove", this.boundMouseMove);
         document.addEventListener("mouseup", this.boundMouseUp);
     }
 
     handleMouseUp() {
-        this.previousY = 0;
         this.active = false;
+        document.exitPointerLock();
         document.removeEventListener("mousemove", this.boundMouseMove);
         document.removeEventListener("mouseup", this.boundMouseUp);
+
+        const cursor = document.getElementById("cursor") as HTMLDivElement;
+        cursor.style.top = ``;
+        cursor.style.left = ``;
     }
 
     handleMouseMove(e: MouseEvent) {
-        const currentY = e.y;
-        const deltaY = (currentY - this.previousY) * -1;
+        if (document.pointerLockElement === document.body) {
+            const cursor = document.getElementById("cursor") as HTMLDivElement;
 
-        const newValue = waveCanvas[this.type] + deltaY;
+            if (!cursor.style.top) cursor.style.top = `${e.y}px`;
+            if (!cursor.style.left) cursor.style.left = `${e.x}px`;
+
+            let y = parseFloat(cursor.style.top);
+            y += e.movementY;
+
+            // // Wrap around the screen edges
+            if (y < 0) y += window.innerHeight;
+            if (y > window.innerHeight) y -= window.innerHeight;
+
+            cursor.style.top = `${y}px`;
+            // cursor.style.left = `${e.x}px`;
+        }
+
+        console.log(e.x);
+        console.log(e.movementY);
+
+        const newValue = waveCanvas[this.type] + e.movementY * -1; // multiplying by -1 inverts the movement direction;
         const clampedValue = clamp(newValue, 1, 360);
         this.element.style.setProperty("--rotation", `${clampedValue}deg`);
         waveCanvas.updateParameters({ [this.type]: clampedValue });
-
-        this.previousY = e.y;
     }
 }
 

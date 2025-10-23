@@ -90,3 +90,13 @@ canvas {
     width: 1px;
     background-color: rgb(144, 144, 144);
 }
+
+#cursor {
+    position: fixed;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    pointer-events: none;
+    background-image: url("https://images.vexels.com/media/users/3/131772/isolated/preview/1fe437ed0169800342962932aca4348f-pixilated-hand-cursor.png");
+    background-size: 100% 100%;
+}
