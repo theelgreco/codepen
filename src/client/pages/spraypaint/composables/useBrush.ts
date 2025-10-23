@@ -57,7 +57,6 @@ export function useBrush({ minBrushSize = 10, maxBrushSize = 300, initialBrushSi
     }
 
     watch(deltaY, (newValue) => {
-        console.log(maxBrushSize);
         brushSize.value = Math.round(clamp(brushSize.value + newValue, minBrushSize, maxBrushSize));
     });
 
