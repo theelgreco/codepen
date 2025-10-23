@@ -126,11 +126,22 @@ class Knob {
     active: boolean = false;
     type: "FREQUENCY" | "AMPLITUDE";
 
+    previousY: number = 0;
+
+    // Store bound methods to maintain same function reference
+    private boundMouseMove: (e: MouseEvent) => void;
+    private boundMouseUp: (e: MouseEvent) => void;
+
     constructor(id: string, type: "FREQUENCY" | "AMPLITUDE") {
         this.element = document.getElementById(id) as HTMLDivElement;
         this.type = type;
-        this.element.addEventListener("wheel", this.handleMouseWheel.bind(this));
         this.element.style.setProperty("--rotation", `${clamp(waveCanvas[this.type], 0, 360)}deg`);
+
+        this.element.addEventListener("wheel", this.handleMouseWheel.bind(this));
+        this.element.addEventListener("mousedown", this.handleMouseDown.bind(this));
+
+        this.boundMouseMove = this.handleMouseMove.bind(this);
+        this.boundMouseUp = this.handleMouseUp.bind(this);
     }
 
     handleMouseWheel(e: WheelEvent) {
@@ -138,6 +149,32 @@ class Knob {
         const clampedValue = clamp(newValue, 1, 360);
         this.element.style.setProperty("--rotation", `${clampedValue}deg`);
         waveCanvas.updateParameters({ [this.type]: clampedValue });
+    }
+
+    handleMouseDown(e: MouseEvent) {
+        this.previousY = e.y;
+        this.active = true;
+        document.addEventListener("mousemove", this.boundMouseMove);
+        document.addEventListener("mouseup", this.boundMouseUp);
+    }
+
+    handleMouseUp() {
+        this.previousY = 0;
+        this.active = false;
+        document.removeEventListener("mousemove", this.boundMouseMove);
+        document.removeEventListener("mouseup", this.boundMouseUp);
+    }
+
+    handleMouseMove(e: MouseEvent) {
+        const currentY = e.y;
+        const deltaY = (currentY - this.previousY) * -1;
+
+        const newValue = waveCanvas[this.type] + deltaY;
+        const clampedValue = clamp(newValue, 1, 360);
+        this.element.style.setProperty("--rotation", `${clampedValue}deg`);
+        waveCanvas.updateParameters({ [this.type]: clampedValue });
+
+        this.previousY = e.y;
     }
 }
 
