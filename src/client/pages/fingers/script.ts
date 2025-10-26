@@ -1,8 +1,8 @@
 const trackpad = document.getElementById("trackpad") as HTMLDivElement;
 
-// document.body.addEventListener("mousedown", async () => {
-//     await document.body.requestPointerLock();
-// });
+document.body.addEventListener("mousedown", async () => {
+    await document.body.requestPointerLock();
+});
 
 window.addEventListener("message", (event) => {
     if (event.data.type === "trackpad") {
