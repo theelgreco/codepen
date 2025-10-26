@@ -221,6 +221,10 @@ function randomise() {
     updateValues();
 }
 
+// window.addEventListener("message", (event) => {
+//     console.log(event);
+// });
+
 // setInterval(() => {
 //     randomise();
 // }, 1600);
