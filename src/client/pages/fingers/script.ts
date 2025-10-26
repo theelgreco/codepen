@@ -55,23 +55,56 @@ interface TrackpadEvent extends CustomEvent {
     };
 }
 
-function singleFingerGestures() {}
-
 const gestureHandlers = {
     1: singleFingerGestures,
+    2: twoFingerGestures,
 };
 
-let initialData: Finger[] | null = null;
+let initialData: Finger[] = [];
 let numFingers = 0;
+
+const gestureTextElement = document.getElementById("gesture") as HTMLHeadingElement;
+
+function singleFingerGestures(data: Finger[]) {}
+
+function twoFingerGestures(data: Finger[]) {
+    if (initialData?.length < 2 || data?.length < 2) return;
+
+    let fingerOne = false;
+    let fingerTwo = false;
+
+    if (data[0].position.y - initialData[0].position.y >= 0.1) {
+        fingerOne = true;
+    }
+
+    if (data[1].position.y - initialData[1].position.y >= 0.1) {
+        fingerTwo = true;
+    }
+
+    if (fingerOne && fingerTwo) {
+        gestureTextElement.textContent = "Swipe up";
+    }
+}
 
 window.addEventListener("trackpad", (e) => {
     const ev = e as TrackpadEvent;
     const { fingers } = ev.detail;
-    if (numFingers === fingers.length) {
+
+    if (numFingers && numFingers === fingers.length) {
+        switch (fingers.length) {
+            case 1:
+                singleFingerGestures(fingers);
+                break;
+            case 2:
+                twoFingerGestures(fingers);
+                break;
+        }
     } else {
         numFingers = fingers.length;
         initialData = fingers;
     }
+
+    if (numFingers === 0) gestureTextElement.textContent = "";
 
     // remove previous frame data from screen
     while (trackpad.firstChild) {
