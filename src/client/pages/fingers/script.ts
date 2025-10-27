@@ -90,6 +90,8 @@ window.addEventListener("trackpad", (e) => {
     const ev = e as TrackpadEvent;
     const { fingers } = ev.detail;
 
+    // console.log(`Angle: ${fingers[0].angle}, Major: ${fingers[0].majorAxis}, Minor: ${fingers[0].minorAxis}`);
+
     if (numFingers && numFingers === fingers.length) {
         switch (fingers.length) {
             case 1:
@@ -117,8 +119,9 @@ window.addEventListener("trackpad", (e) => {
         el.className = "finger";
         el.style.top = `${trackpad.offsetHeight * (1 - finger.position.y)}px`;
         el.style.left = `${trackpad.offsetWidth * finger.position.x}px`;
-        el.style.width = `${finger.majorAxis * 5}px`;
-        el.style.height = `${finger.minorAxis * 5}px`;
+        el.style.width = `${finger.minorAxis * 5}px`;
+        el.style.height = `${finger.majorAxis * 5}px`;
+        // el.style.rotate = `-${finger.angle}deg`;
         el.style.opacity = `${finger.unk2}`;
         trackpad.appendChild(el);
     });
