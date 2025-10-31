@@ -14,14 +14,14 @@ body {
     place-items: center;
 }
 
-#loader {
+.loader {
     position: relative;
     --height: 40px;
     height: var(--height);
     aspect-ratio: 1;
 }
 
-#loader span {
+.loader span {
     --hand-height: calc(var(--height) / 4);
     position: absolute;
     height: var(--hand-height);
