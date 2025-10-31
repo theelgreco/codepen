@@ -8,6 +8,13 @@
     </head>
     <body>
         <div class="loader" data-num-hands="20" data-animation-duration="600"></div>
+        <button class="btn" onclick="this.classList.toggle('loading')">
+            <p style="font-size: 0.8rem">Click me</p>
+            <div class="loader" data-num-hands="20" data-animation-duration="600" style="--height: 13px"></div>
+            <svg class="icon" width="10px" height="10px" stroke="white">
+                <path d="M 5 0 L 5 10 M 0 5 L 10 5"></path>
+            </svg>
+        </button>
         <script type="module" src="script.ts"></script>
     </body>
 </html>

@@ -34,6 +34,41 @@ body {
     animation-timing-function: ease-out;
 }
 
+.btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
+    padding-inline: 1.25rem;
+    padding-block: 0.75rem;
+    background-color: #111;
+    color: #ccc;
+    border: 1px solid #222;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 200ms ease-out;
+    min-width: 130px;
+}
+
+.btn:not(.loading):hover {
+    background-color: #171717;
+}
+
+.btn.loading {
+    background-color: #222;
+    border-color: #333;
+    color: #cccccc64;
+    transition: all 200ms ease-out;
+}
+
+.btn.loading .icon {
+    display: none;
+}
+
+.btn:not(.loading) .loader {
+    display: none;
+}
+
 @keyframes load {
     from {
         opacity: 1;
