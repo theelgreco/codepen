@@ -1,4 +1,4 @@
-const numHands = 10;
+const numHands = 20;
 const animationDuration = 600;
 const loader = document.getElementById("loader") as HTMLDivElement;
 
