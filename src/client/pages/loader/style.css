@@ -16,16 +16,19 @@ body {
 
 #loader {
     position: relative;
-    width: 50px;
-    height: 50px;
+    --height: 40px;
+    height: var(--height);
+    aspect-ratio: 1;
 }
 
 #loader span {
+    --hand-height: calc(var(--height) / 4);
     position: absolute;
-    height: 10px;
-    width: 2px;
+    height: var(--hand-height);
+    width: 1px;
     background-color: white;
-    transform-origin: 50% calc(100% + 10px);
+    left: 50%;
+    transform-origin: 50% calc(100% + var(--hand-height));
     animation-name: load;
     animation-iteration-count: infinite;
     animation-timing-function: ease-out;
