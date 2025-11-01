@@ -12,7 +12,7 @@ class LoadingSpinner extends HTMLElement {
     connectedCallback() {
         this.innerHTML = "";
 
-        this.size = this.getAttribute("size") && parseInt(this.getAttribute("size")!) ? parseInt(this.getAttribute("size")!) : 50;
+        this.size = this.getAttribute("size") && parseInt(this.getAttribute("size")!) ? parseInt(this.getAttribute("size")!) : 0;
         this.hands = this.getAttribute("hands") && parseInt(this.getAttribute("hands")!) ? parseInt(this.getAttribute("hands")!) : 20;
         this.duration =
             this.getAttribute("duration") && parseInt(this.getAttribute("duration")!) ? parseInt(this.getAttribute("duration")!) : 600;
