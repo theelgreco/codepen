@@ -20,6 +20,7 @@ class LoadingSpinner extends HTMLElement {
                 height: var(--loader-height);
                 position: relative;
                 aspect-ratio: 1;
+                display: block;
             }
 
             span {
