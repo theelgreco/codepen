@@ -1,15 +1,11 @@
 class LoadingSpinner extends HTMLElement {
-    shadowRoot: ShadowRoot;
     size = 50;
     hands = 20;
     duration = 600;
 
-    constructor() {
-        super();
-        this.shadowRoot = this.attachShadow({ mode: "closed" });
-    }
-
     connectedCallback() {
+        const shadowRoot = this.attachShadow({ mode: "closed" });
+
         this.innerHTML = "";
 
         this.size = this.getAttribute("size") && parseInt(this.getAttribute("size")!) ? parseInt(this.getAttribute("size")!) : 0;
@@ -56,10 +52,10 @@ class LoadingSpinner extends HTMLElement {
             hand.style.animationDuration = `${this.duration}ms`;
             hand.style.animationDelay = `${(this.duration / this.hands) * i}ms`;
             hand.style.opacity = "0";
-            this.shadowRoot.appendChild(hand);
+            shadowRoot.appendChild(hand);
         }
 
-        this.shadowRoot.appendChild(style);
+        shadowRoot.appendChild(style);
     }
 }
 
