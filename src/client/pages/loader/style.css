@@ -34,9 +34,18 @@ hr {
     flex-direction: column;
     gap: 2rem;
     align-items: start;
-    width: max(300px, calc(33% - 1rem));
+    min-width: 300px;
+    width: calc(33% - 0.5rem);
+    max-width: calc(50% - 0.5rem);
+    flex-grow: 1;
     height: 180px;
     justify-content: space-between;
+}
+
+@media screen and (width <= 768px) {
+    .card {
+        max-width: 100%;
+    }
 }
 
 .card small {
