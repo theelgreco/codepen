@@ -10,8 +10,8 @@ body {
     width: 100vw;
     height: 100vh;
     background-color: #111;
-    display: grid;
-    place-items: center;
+    display: flex;
+    flex-direction: column;
 }
 
 .btn {
@@ -28,6 +28,7 @@ body {
     cursor: pointer;
     transition: all 200ms ease-out;
     min-width: 130px;
+    width: 130px;
 }
 
 .btn:active {

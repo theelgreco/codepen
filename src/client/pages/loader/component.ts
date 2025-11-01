@@ -1,4 +1,4 @@
-class LoadingSpinner extends HTMLElement {
+export class LoadingSpinner extends HTMLElement {
     size = 50;
     hands = 20;
     duration = 600;
@@ -59,5 +59,3 @@ class LoadingSpinner extends HTMLElement {
         shadowRoot.appendChild(style);
     }
 }
-
-window.customElements.define("loading-spinner", LoadingSpinner);
