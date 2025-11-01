@@ -50,6 +50,11 @@ body {
     min-width: 130px;
 }
 
+.btn:active {
+    scale: 0.97;
+    transition: all 0.2s ease-out;
+}
+
 .btn:not(.loading):hover {
     background-color: #171717;
 }
