@@ -7,17 +7,26 @@
         <title>loader</title>
     </head>
     <body>
-        <div style="height: 50px; width: 50px">
-            <loading-spinner hands="20" duration="300"></loading-spinner>
+        <h1 style="color: #ccc; font-family: 'FUNGIS'">LOADING SPINNER</h1>
+        <hr />
+        <div class="cards">
+            <div class="card">
+                <small>COMPONENT</small>
+                <div style="height: 50px; width: 50px">
+                    <loading-spinner hands="20" duration="600"></loading-spinner>
+                </div>
+            </div>
+            <div class="card">
+                <small>USAGE</small>
+                <button class="btn" onclick="this.classList.toggle('loading')">
+                    <p style="font-size: 0.8rem">Click me</p>
+                    <loading-spinner size="13" hands="20" duration="600"></loading-spinner>
+                    <svg class="icon" width="10px" height="10px" stroke="white">
+                        <path d="M 5 0 L 5 10 M 0 5 L 10 5"></path>
+                    </svg>
+                </button>
+            </div>
         </div>
-        <button class="btn" onclick="this.classList.toggle('loading')">
-            <p style="font-size: 0.8rem">Click me</p>
-            <loading-spinner size="13" hands="20" duration="600"></loading-spinner>
-            <svg class="icon" width="10px" height="10px" stroke="white">
-                <path d="M 5 0 L 5 10 M 0 5 L 10 5"></path>
-            </svg>
-        </button>
         <script type="module" src="script.ts"></script>
-        <script type="module" src="component.ts"></script>
     </body>
 </html>

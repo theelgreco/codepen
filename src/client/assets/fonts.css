@@ -4,6 +4,24 @@
         url("./fonts/Inter-Italic-VariableFont_opsz,wght.ttf") format("truetype");
 }
 
+@font-face {
+    font-family: "FUNGIS";
+    src: url("./fonts/FUNGIS-Regular.ttf") format("truetype");
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: "FUNGIS";
+    src: url("./fonts/FUNGIS-Bold.ttf") format("truetype");
+    font-weight: 700;
+}
+
+@font-face {
+    font-family: "FUNGIS";
+    src: url("./fonts/FUNGIS-Heavy.ttf") format("truetype");
+    font-weight: 900;
+}
+
 body {
     font-family: "Inter";
 }
