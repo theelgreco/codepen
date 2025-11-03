@@ -70,18 +70,24 @@ function singleFingerGestures(data: Finger[]) {}
 function twoFingerGestures(data: Finger[]) {
     if (initialData?.length < 2 || data?.length < 2) return;
 
-    let fingerOne = false;
-    let fingerTwo = false;
+    const fingerOne = data[0];
+    const fingerTwo = data[1];
 
-    if (data[0].position.y - initialData[0].position.y >= 0.1) {
-        fingerOne = true;
+    let fingerOneSwiped = false;
+    let fingerTwoSwiped = false;
+
+    const fingerOneDifference = fingerOne.position.y - initialData[0].position.y;
+    const fingerTwoDifference = fingerTwo.position.y - initialData[1].position.y;
+
+    if (fingerOneDifference >= 0.1) {
+        fingerOneSwiped = true;
     }
 
-    if (data[1].position.y - initialData[1].position.y >= 0.1) {
-        fingerTwo = true;
+    if (fingerTwoDifference >= 0.1) {
+        fingerTwoSwiped = true;
     }
 
-    if (fingerOne && fingerTwo) {
+    if (fingerOneSwiped && fingerTwoSwiped) {
         gestureTextElement.textContent = "Swipe up";
     }
 }
