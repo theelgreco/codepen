@@ -1,9 +1,15 @@
+interface DrawCanvasOptions {
+    width?: number;
+    height?: number;
+    autoResize?: boolean;
+}
+
 /**
  * DrawCanvas is a utility class for managing and drawing on an HTML5 canvas element.
  * It handles device pixel ratio scaling, canvas sizing, and provides basic drawing context setup.
  *
  * @example
- * const drawer = new DrawCanvas('myCanvas', 800, 600);
+ * const drawer = new DrawCanvas('myCanvas', { width: 800, height: 600, autoResize: false });
  * // Use drawer.ctx to draw shapes, lines, etc.
  */
 export class DrawCanvas {
@@ -43,7 +49,7 @@ export class DrawCanvas {
      * @param width - The desired width of the canvas in CSS pixels (default: 500).
      * @param height - The desired height of the canvas in CSS pixels (default: 500).
      */
-    constructor(canvasId: string, width: number = 500, height: number = 500) {
+    constructor(canvasId: string, { width = 500, height = 500, autoResize = false }: DrawCanvasOptions = {}) {
         this.CANVAS_WIDTH = width;
         this.CANVAS_HEIGHT = height;
         // Get the canvas element by id
@@ -54,6 +60,10 @@ export class DrawCanvas {
         this.RADIUS = this.CANVAS_WIDTH / 2;
         // Initialize canvas size and context
         this.setupCanvas();
+
+        if (autoResize) {
+            document.addEventListener("resize", this.updateCanvasSize.bind(this));
+        }
     }
 
     /**
@@ -108,5 +118,9 @@ export class DrawCanvas {
      * Intended to be implemented in subclasses or future versions.
      * @protected
      */
-    protected updateCanvasSize() {}
+    protected updateCanvasSize() {
+        this.CANVAS_WIDTH = window.innerWidth;
+        this.CANVAS_HEIGHT = window.innerHeight;
+        this.setupCanvas();
+    }
 }

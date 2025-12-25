@@ -17,7 +17,7 @@ class WaveCanvas extends DrawCanvas {
     private target_points: number[][] = [];
 
     constructor(canvasId: string, width: number = window.innerWidth - 28) {
-        super(canvasId, width);
+        super(canvasId, { width });
         window.addEventListener("resize", this.handleWindowResize.bind(this));
         this.calculatePoints(); // Initialize points
     }
