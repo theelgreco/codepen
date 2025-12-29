@@ -12,7 +12,7 @@ export class Player implements DrawableMixin {
     collidable: boolean = true;
 
     health: number = 100;
-    speed: number = 300;
+    speed: number = 10;
 
     constructor(canvas: GameCanvas, { x = 0, y = 0, width = 0, height = 0 }: DrawableMixinConstructorOptions = {}) {
         this.canvas = canvas;
@@ -41,15 +41,15 @@ export class Player implements DrawableMixin {
         };
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
+    draw(): void {
         this.path = new Path2D();
         this.path.rect(this.position.x, this.position.y, this.size.width, this.size.height);
-        ctx.fillStyle = "white";
-        ctx.fill(this.path);
+        this.canvas.ctx.fillStyle = "white";
+        this.canvas.ctx.fill(this.path);
     }
 
     move(direction: Direction): void {
-        let collidedObj: DrawableMixin | undefined = undefined;
+        let collidedObj: Move | undefined = undefined;
         let newX: number | null = null;
         let newY: number | null = null;
         let move: Move | null = null;

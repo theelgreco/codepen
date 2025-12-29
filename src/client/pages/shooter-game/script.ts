@@ -1,7 +1,7 @@
 import { DrawCanvas } from "@/classes/DrawCanvas";
 import { DIRECTIONS } from "./constants";
 import { DrawableMixin, Player } from "./classes";
-import { Direction, Key, Move } from "./types";
+import type { Key, Move } from "./types";
 
 class Controller {
     keys: Key[] = [
@@ -54,8 +54,17 @@ export class GameCanvas extends DrawCanvas {
         super(canvasId, { width: window.innerWidth, height: window.innerHeight, autoResize: true });
     }
 
-    get collidables(): DrawableMixin[] {
-        return this.objects.filter((obj) => obj.collidable);
+    get collidables(): Move[] {
+        return [...Object.values(this.bounds), ...this.objects.filter((obj) => obj.collidable)];
+    }
+
+    get bounds(): { [key: string]: Move } {
+        return {
+            top: { position: { x: -1, y: -1 }, size: { width: this.canvas.width / 2 + 1, height: 1 } },
+            right: { position: { x: this.canvas.width / 2 + 1, y: -1 }, size: { width: 1, height: this.canvas.height / 2 + 1 } },
+            bottom: { position: { x: -1, y: this.canvas.height / 2 + 1 }, size: { width: this.canvas.width / 2 + 1, height: 1 } },
+            left: { position: { x: -1, y: -1 }, size: { width: 1, height: this.canvas.height / 2 + 1 } },
+        };
     }
 
     translate(point: number) {
@@ -72,127 +81,127 @@ export class GameCanvas extends DrawCanvas {
     }
 
     /**
-     * This checks if the top of obj1 has collided with the bottom of obj2.
+     * This checks if the top of move has collided with the bottom of collidable.
      *
-     * To find this out, we must check if obj1s top edge is inside obj2s bottom edge vertically
-     * AND obj1s bottom edge is not above obj2s top edge
-     * AND either of obj1s top corners are inside obj2s bottom edge horizontally OR if either of obj2s bottom corners are inside obj1s top edge horizontally.
+     * To find this out, we must check if moves top edge is inside collidables bottom edge vertically
+     * AND moves bottom edge is not above collidables top edge
+     * AND either of moves top corners are inside collidables bottom edge horizontally OR if either of collidables bottom corners are inside moves top edge horizontally.
      *
-     * @returns `boolean` Whether the top side of obj1 has collided with the bottom side of obj2
+     * @returns `boolean` Whether the top side of move has collided with the bottom side of collidable
      */
-    static hasCollidedTop(obj1: Move, obj2: DrawableMixin): boolean {
-        const obj1LeftSide = obj1.position.x;
-        const obj1RightSide = obj1.position.x + obj1.size.width;
-        const obj1TopSide = obj1.position.y;
-        const obj1BottomSide = obj1.position.y + obj1.size.height;
+    static hasCollidedTop(move: Move, collidable: Move): boolean {
+        const moveLeftSide = move.position.x;
+        const moveRightSide = move.position.x + move.size.width;
+        const moveTopSide = move.position.y;
+        const moveBottomSide = move.position.y + move.size.height;
 
-        const obj2LeftSide = obj2.position.x;
-        const obj2RightSide = obj2.position.x + obj2.size.width;
-        const obj2TopSide = obj2.position.y;
-        const obj2BottomSide = obj2.position.y + obj2.size.height;
+        const collidableLeftSide = collidable.position.x;
+        const collidableRightSide = collidable.position.x + collidable.size.width;
+        const collidableTopSide = collidable.position.y;
+        const collidableBottomSide = collidable.position.y + collidable.size.height;
 
-        const obj1InsideObj2Vertically = obj1TopSide < obj2BottomSide && obj1BottomSide > obj2TopSide;
-        const obj1InsideObj2Horizontally =
-            (obj1LeftSide > obj2LeftSide && obj1LeftSide < obj2RightSide) ||
-            (obj1RightSide > obj2LeftSide && obj1RightSide < obj2RightSide);
-        const obj2InsideObj1Horizontally =
-            (obj2LeftSide > obj1LeftSide && obj2LeftSide < obj1RightSide) ||
-            (obj2RightSide > obj1LeftSide && obj2RightSide < obj1RightSide);
+        const moveInsidecollidableVertically = moveTopSide < collidableBottomSide && moveBottomSide > collidableTopSide;
+        const moveInsidecollidableHorizontally =
+            (moveLeftSide > collidableLeftSide && moveLeftSide < collidableRightSide) ||
+            (moveRightSide > collidableLeftSide && moveRightSide < collidableRightSide);
+        const collidableInsidemoveHorizontally =
+            (collidableLeftSide > moveLeftSide && collidableLeftSide < moveRightSide) ||
+            (collidableRightSide > moveLeftSide && collidableRightSide < moveRightSide);
 
-        return obj1InsideObj2Vertically && (obj1InsideObj2Horizontally || obj2InsideObj1Horizontally);
+        return moveInsidecollidableVertically && (moveInsidecollidableHorizontally || collidableInsidemoveHorizontally);
     }
 
     /**
-     * This checks if the bottom of obj1 has collided with the top of obj2.
+     * This checks if the bottom of move has collided with the top of collidable.
      *
-     * To find this out, we must check if obj1s bottom edge is inside obj2s top edge vertically
-     * AND obj1s bottom edge is not below obj2s bottom edge
-     * AND either of obj1s bottom corners are inside obj2s top edge horizontally OR if either of obj2s top corners are inside obj1s bottom edge horizontally.
+     * To find this out, we must check if moves bottom edge is inside collidables top edge vertically
+     * AND moves bottom edge is not below collidables bottom edge
+     * AND either of moves bottom corners are inside collidables top edge horizontally OR if either of collidables top corners are inside moves bottom edge horizontally.
      *
-     * @returns `boolean` Whether the bottom side of obj1 has collided with the top side of obj2
+     * @returns `boolean` Whether the bottom side of move has collided with the top side of collidable
      */
-    static hasCollidedBottom(obj1: Move, obj2: DrawableMixin): boolean {
-        const obj1LeftSide = obj1.position.x;
-        const obj1RightSide = obj1.position.x + obj1.size.width;
-        const obj1TopSide = obj1.position.y;
-        const obj1BottomSide = obj1.position.y + obj1.size.height;
+    static hasCollidedBottom(move: Move, collidable: Move): boolean {
+        const moveLeftSide = move.position.x;
+        const moveRightSide = move.position.x + move.size.width;
+        const moveTopSide = move.position.y;
+        const moveBottomSide = move.position.y + move.size.height;
 
-        const obj2LeftSide = obj2.position.x;
-        const obj2RightSide = obj2.position.x + obj2.size.width;
-        const obj2TopSide = obj2.position.y;
-        const obj2BottomSide = obj2.position.y + obj2.size.height;
+        const collidableLeftSide = collidable.position.x;
+        const collidableRightSide = collidable.position.x + collidable.size.width;
+        const collidableTopSide = collidable.position.y;
+        const collidableBottomSide = collidable.position.y + collidable.size.height;
 
-        const obj1InsideObj2Vertically = obj1TopSide < obj2BottomSide && obj1BottomSide > obj2TopSide;
-        const obj1InsideObj2Horizontally =
-            (obj1LeftSide > obj2LeftSide && obj1LeftSide < obj2RightSide) ||
-            (obj1RightSide > obj2LeftSide && obj1RightSide < obj2RightSide);
-        const obj2InsideObj1Horizontally =
-            (obj2LeftSide > obj1LeftSide && obj2LeftSide < obj1RightSide) ||
-            (obj2RightSide > obj1LeftSide && obj2RightSide < obj1RightSide);
+        const moveInsidecollidableVertically = moveTopSide < collidableBottomSide && moveBottomSide > collidableTopSide;
+        const moveInsidecollidableHorizontally =
+            (moveLeftSide > collidableLeftSide && moveLeftSide < collidableRightSide) ||
+            (moveRightSide > collidableLeftSide && moveRightSide < collidableRightSide);
+        const collidableInsidemoveHorizontally =
+            (collidableLeftSide > moveLeftSide && collidableLeftSide < moveRightSide) ||
+            (collidableRightSide > moveLeftSide && collidableRightSide < moveRightSide);
 
-        return obj1InsideObj2Vertically && (obj1InsideObj2Horizontally || obj2InsideObj1Horizontally);
+        return moveInsidecollidableVertically && (moveInsidecollidableHorizontally || collidableInsidemoveHorizontally);
     }
 
     /**
-     * This checks if the right side of obj1 has collided with the left side of obj2.
+     * This checks if the right side of move has collided with the left side of collidable.
      *
-     * To find this out, we must check if obj1s right edge is inside obj2s left edge horizontally
-     * AND obj1s left edge is not past obj2s right edge
-     * AND either of obj1s right corners are inside obj2s left edge vertically OR if either of obj2s left corners are inside obj1s right edge vertically.
+     * To find this out, we must check if moves right edge is inside collidables left edge horizontally
+     * AND moves left edge is not past collidables right edge
+     * AND either of moves right corners are inside collidables left edge vertically OR if either of collidables left corners are inside moves right edge vertically.
      *
-     * @returns `boolean` Whether the right side of obj1 has collided with the left side of obj2
+     * @returns `boolean` Whether the right side of move has collided with the left side of collidable
      */
-    static hasCollidedRight(obj1: Move, obj2: DrawableMixin): boolean {
-        const obj1LeftSide = obj1.position.x;
-        const obj1RightSide = obj1.position.x + obj1.size.width;
-        const obj1TopSide = obj1.position.y;
-        const obj1BottomSide = obj1.position.y + obj1.size.height;
+    static hasCollidedRight(move: Move, collidable: Move): boolean {
+        const moveLeftSide = move.position.x;
+        const moveRightSide = move.position.x + move.size.width;
+        const moveTopSide = move.position.y;
+        const moveBottomSide = move.position.y + move.size.height;
 
-        const obj2LeftSide = obj2.position.x;
-        const obj2RightSide = obj2.position.x + obj2.size.width;
-        const obj2TopSide = obj2.position.y;
-        const obj2BottomSide = obj2.position.y + obj2.size.height;
+        const collidableLeftSide = collidable.position.x;
+        const collidableRightSide = collidable.position.x + collidable.size.width;
+        const collidableTopSide = collidable.position.y;
+        const collidableBottomSide = collidable.position.y + collidable.size.height;
 
-        const obj1InsideObj2Horizontally = obj1RightSide > obj2LeftSide && obj1LeftSide < obj2RightSide;
-        const obj1InsideObj2Vertically =
-            (obj1TopSide > obj2TopSide && obj1TopSide < obj2BottomSide) ||
-            (obj1BottomSide > obj2TopSide && obj1BottomSide < obj2BottomSide);
-        const obj2InsideObj1Vertically =
-            (obj2TopSide > obj1TopSide && obj2TopSide < obj1BottomSide) ||
-            (obj2BottomSide > obj1TopSide && obj2BottomSide < obj1BottomSide);
+        const moveInsidecollidableHorizontally = moveRightSide > collidableLeftSide && moveLeftSide < collidableRightSide;
+        const moveInsidecollidableVertically =
+            (moveTopSide > collidableTopSide && moveTopSide < collidableBottomSide) ||
+            (moveBottomSide > collidableTopSide && moveBottomSide < collidableBottomSide);
+        const collidableInsidemoveVertically =
+            (collidableTopSide > moveTopSide && collidableTopSide < moveBottomSide) ||
+            (collidableBottomSide > moveTopSide && collidableBottomSide < moveBottomSide);
 
-        return obj1InsideObj2Horizontally && (obj1InsideObj2Vertically || obj2InsideObj1Vertically);
+        return moveInsidecollidableHorizontally && (moveInsidecollidableVertically || collidableInsidemoveVertically);
     }
 
     /**
-     * This checks if the left side of obj1 has collided with the right side of obj2.
+     * This checks if the left side of move has collided with the right side of collidable.
      *
-     * To find this out, we must check if obj1s left edge is inside obj2s right edge horizontally
-     * AND obj1s right edge is not past obj2s left edge
-     * AND either of obj1s left corners are inside obj2s right edge vertically OR if either of obj2s right corners are inside obj1s left edge vertically.
+     * To find this out, we must check if moves left edge is inside collidables right edge horizontally
+     * AND moves right edge is not past collidables left edge
+     * AND either of moves left corners are inside collidables right edge vertically OR if either of collidables right corners are inside moves left edge vertically.
      *
-     * @returns `boolean` Whether the left side of obj1 has collided with the right side of obj2
+     * @returns `boolean` Whether the left side of move has collided with the right side of collidable
      */
-    static hasCollidedLeft(obj1: Move, obj2: DrawableMixin): boolean {
-        const obj1LeftSide = obj1.position.x;
-        const obj1RightSide = obj1.position.x + obj1.size.width;
-        const obj1TopSide = obj1.position.y;
-        const obj1BottomSide = obj1.position.y + obj1.size.height;
+    static hasCollidedLeft(move: Move, collidable: Move): boolean {
+        const moveLeftSide = move.position.x;
+        const moveRightSide = move.position.x + move.size.width;
+        const moveTopSide = move.position.y;
+        const moveBottomSide = move.position.y + move.size.height;
 
-        const obj2LeftSide = obj2.position.x;
-        const obj2RightSide = obj2.position.x + obj2.size.width;
-        const obj2TopSide = obj2.position.y;
-        const obj2BottomSide = obj2.position.y + obj2.size.height;
+        const collidableLeftSide = collidable.position.x;
+        const collidableRightSide = collidable.position.x + collidable.size.width;
+        const collidableTopSide = collidable.position.y;
+        const collidableBottomSide = collidable.position.y + collidable.size.height;
 
-        const obj1InsideObj2Horizontally = obj1RightSide > obj2LeftSide && obj1LeftSide < obj2RightSide;
-        const obj1InsideObj2Vertically =
-            (obj1TopSide > obj2TopSide && obj1TopSide < obj2BottomSide) ||
-            (obj1BottomSide > obj2TopSide && obj1BottomSide < obj2BottomSide);
-        const obj2InsideObj1Vertically =
-            (obj2TopSide > obj1TopSide && obj2TopSide < obj1BottomSide) ||
-            (obj2BottomSide > obj1TopSide && obj2BottomSide < obj1BottomSide);
+        const moveInsidecollidableHorizontally = moveRightSide > collidableLeftSide && moveLeftSide < collidableRightSide;
+        const moveInsidecollidableVertically =
+            (moveTopSide > collidableTopSide && moveTopSide < collidableBottomSide) ||
+            (moveBottomSide > collidableTopSide && moveBottomSide < collidableBottomSide);
+        const collidableInsidemoveVertically =
+            (collidableTopSide > moveTopSide && collidableTopSide < moveBottomSide) ||
+            (collidableBottomSide > moveTopSide && collidableBottomSide < moveBottomSide);
 
-        return obj1InsideObj2Horizontally && (obj1InsideObj2Vertically || obj2InsideObj1Vertically);
+        return moveInsidecollidableHorizontally && (moveInsidecollidableVertically || collidableInsidemoveVertically);
     }
 
     getTopCollisions(obj: Move) {
@@ -231,8 +240,13 @@ export class GameCanvas extends DrawCanvas {
         this.objects.push(obj);
     }
 
+    removeObject(obj: DrawableMixin) {
+        const indexToRemove = this.objects.findIndex((_obj) => _obj === obj);
+        if (indexToRemove > -1) this.objects.splice(indexToRemove, 1);
+    }
+
     drawObjects() {
-        this.objects.forEach((obj) => obj.draw(this.ctx));
+        this.objects.forEach((obj) => obj.draw());
     }
 
     draw(elapsed: number) {
