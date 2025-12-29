@@ -1,6 +1,6 @@
 import { DIRECTIONS, HEALTH_LEVELS } from "../constants";
 import { GameCanvas } from "../script";
-import type { Corners, Dimension, Direction, HealthLevel, Position } from "../types";
+import type { Corners, Dimension, Direction, HealthLevel, Move, Position } from "../types";
 import { DrawableMixin, DrawableMixinConstructorOptions } from "./abstract";
 
 export class Player implements DrawableMixin {
@@ -12,7 +12,7 @@ export class Player implements DrawableMixin {
     collidable: boolean = true;
 
     health: number = 100;
-    speed: number = 10;
+    speed: number = 300;
 
     constructor(canvas: GameCanvas, { x = 0, y = 0, width = 0, height = 0 }: DrawableMixinConstructorOptions = {}) {
         this.canvas = canvas;
@@ -50,27 +50,55 @@ export class Player implements DrawableMixin {
 
     move(direction: Direction): void {
         let collidedObj: DrawableMixin | undefined = undefined;
+        let newX: number | null = null;
+        let newY: number | null = null;
+        let move: Move | null = null;
 
         switch (direction) {
             case DIRECTIONS.UP:
-                this.position.y -= this.speed;
-                collidedObj = this.canvas.getTopCollisions(this);
+                newY = this.position.y - this.speed;
+                move = { size: { width: this.size.width, height: this.position.y - newY }, position: { x: this.position.x, y: newY } };
+                collidedObj = this.canvas.getTopCollisions(move);
+
                 if (collidedObj) this.position.y = collidedObj.position.y + collidedObj.size.height;
+                else this.position.y = newY;
+
                 break;
             case DIRECTIONS.DOWN:
-                this.position.y += this.speed;
-                collidedObj = this.canvas.getTopCollisions(this);
+                newY = this.position.y + this.speed;
+                move = {
+                    size: { width: this.size.width, height: newY - this.position.y + this.size.height },
+                    position: { x: this.position.x, y: this.position.y + this.size.height },
+                };
+                collidedObj = this.canvas.getBottomCollisions(move);
+
                 if (collidedObj) this.position.y = collidedObj.position.y - this.size.height;
+                else this.position.y = newY;
+
                 break;
             case DIRECTIONS.LEFT:
-                this.position.x -= this.speed;
-                collidedObj = this.canvas.getLeftCollisions(this);
+                newX = this.position.x - this.speed;
+                move = {
+                    size: { width: this.position.x - newX, height: this.size.height },
+                    position: { x: newX, y: this.position.y },
+                };
+                collidedObj = this.canvas.getLeftCollisions(move);
+
                 if (collidedObj) this.position.x = collidedObj.position.x + collidedObj.size.width;
+                else this.position.x = newX;
+
                 break;
             case DIRECTIONS.RIGHT:
-                this.position.x += this.speed;
-                collidedObj = this.canvas.getRightCollisions(this);
+                newX = this.position.x + this.speed;
+                move = {
+                    size: { width: newX - this.position.x, height: this.size.height },
+                    position: { x: this.position.x + this.size.width, y: this.position.y },
+                };
+                collidedObj = this.canvas.getRightCollisions(move);
+
                 if (collidedObj) this.position.x = collidedObj.position.x - this.size.width;
+                else this.position.x = newX;
+
                 break;
         }
     }

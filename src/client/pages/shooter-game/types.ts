@@ -25,3 +25,8 @@ export interface Key {
     name: "ArrowUp" | "ArrowDown" | "ArrowLeft" | "ArrowRight";
     pressed: boolean;
 }
+
+export interface Move {
+    size: Dimension;
+    position: Position;
+}

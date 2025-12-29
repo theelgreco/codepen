@@ -1,7 +1,7 @@
 import { DrawCanvas } from "@/classes/DrawCanvas";
 import { DIRECTIONS } from "./constants";
 import { DrawableMixin, Player } from "./classes";
-import { Direction, Key } from "./types";
+import { Direction, Key, Move } from "./types";
 
 class Controller {
     keys: Key[] = [
@@ -80,7 +80,7 @@ export class GameCanvas extends DrawCanvas {
      *
      * @returns `boolean` Whether the top side of obj1 has collided with the bottom side of obj2
      */
-    static hasCollidedTop(obj1: DrawableMixin, obj2: DrawableMixin): boolean {
+    static hasCollidedTop(obj1: Move, obj2: DrawableMixin): boolean {
         const obj1LeftSide = obj1.position.x;
         const obj1RightSide = obj1.position.x + obj1.size.width;
         const obj1TopSide = obj1.position.y;
@@ -111,7 +111,7 @@ export class GameCanvas extends DrawCanvas {
      *
      * @returns `boolean` Whether the bottom side of obj1 has collided with the top side of obj2
      */
-    static hasCollidedBottom(obj1: DrawableMixin, obj2: DrawableMixin): boolean {
+    static hasCollidedBottom(obj1: Move, obj2: DrawableMixin): boolean {
         const obj1LeftSide = obj1.position.x;
         const obj1RightSide = obj1.position.x + obj1.size.width;
         const obj1TopSide = obj1.position.y;
@@ -122,7 +122,7 @@ export class GameCanvas extends DrawCanvas {
         const obj2TopSide = obj2.position.y;
         const obj2BottomSide = obj2.position.y + obj2.size.height;
 
-        const obj1InsideObj2Vertically = obj1BottomSide < obj2TopSide && obj1TopSide > obj2BottomSide;
+        const obj1InsideObj2Vertically = obj1TopSide < obj2BottomSide && obj1BottomSide > obj2TopSide;
         const obj1InsideObj2Horizontally =
             (obj1LeftSide > obj2LeftSide && obj1LeftSide < obj2RightSide) ||
             (obj1RightSide > obj2LeftSide && obj1RightSide < obj2RightSide);
@@ -142,7 +142,7 @@ export class GameCanvas extends DrawCanvas {
      *
      * @returns `boolean` Whether the right side of obj1 has collided with the left side of obj2
      */
-    static hasCollidedRight(obj1: DrawableMixin, obj2: DrawableMixin): boolean {
+    static hasCollidedRight(obj1: Move, obj2: DrawableMixin): boolean {
         const obj1LeftSide = obj1.position.x;
         const obj1RightSide = obj1.position.x + obj1.size.width;
         const obj1TopSide = obj1.position.y;
@@ -173,7 +173,7 @@ export class GameCanvas extends DrawCanvas {
      *
      * @returns `boolean` Whether the left side of obj1 has collided with the right side of obj2
      */
-    static hasCollidedLeft(obj1: DrawableMixin, obj2: DrawableMixin): boolean {
+    static hasCollidedLeft(obj1: Move, obj2: DrawableMixin): boolean {
         const obj1LeftSide = obj1.position.x;
         const obj1RightSide = obj1.position.x + obj1.size.width;
         const obj1TopSide = obj1.position.y;
@@ -184,7 +184,7 @@ export class GameCanvas extends DrawCanvas {
         const obj2TopSide = obj2.position.y;
         const obj2BottomSide = obj2.position.y + obj2.size.height;
 
-        const obj1InsideObj2Horizontally = obj1LeftSide < obj2RightSide && obj1RightSide > obj2LeftSide;
+        const obj1InsideObj2Horizontally = obj1RightSide > obj2LeftSide && obj1LeftSide < obj2RightSide;
         const obj1InsideObj2Vertically =
             (obj1TopSide > obj2TopSide && obj1TopSide < obj2BottomSide) ||
             (obj1BottomSide > obj2TopSide && obj1BottomSide < obj2BottomSide);
@@ -195,7 +195,7 @@ export class GameCanvas extends DrawCanvas {
         return obj1InsideObj2Horizontally && (obj1InsideObj2Vertically || obj2InsideObj1Vertically);
     }
 
-    getTopCollisions(obj: DrawableMixin) {
+    getTopCollisions(obj: Move) {
         return this.collidables
             .filter((collidable) => collidable !== obj)
             .find((collidable) => {
@@ -203,7 +203,7 @@ export class GameCanvas extends DrawCanvas {
             });
     }
 
-    getBottomCollisions(obj: DrawableMixin) {
+    getBottomCollisions(obj: Move) {
         return this.collidables
             .filter((collidable) => collidable !== obj)
             .find((collidable) => {
@@ -211,7 +211,7 @@ export class GameCanvas extends DrawCanvas {
             });
     }
 
-    getRightCollisions(obj: DrawableMixin) {
+    getRightCollisions(obj: Move) {
         return this.collidables
             .filter((collidable) => collidable !== obj)
             .find((collidable) => {
@@ -219,7 +219,7 @@ export class GameCanvas extends DrawCanvas {
             });
     }
 
-    getLeftCollisions(obj: DrawableMixin) {
+    getLeftCollisions(obj: Move) {
         return this.collidables
             .filter((collidable) => collidable !== obj)
             .find((collidable) => {
@@ -245,10 +245,9 @@ export class GameCanvas extends DrawCanvas {
 function main() {
     const canvas = new GameCanvas("canvas");
 
-    const player = new Player(canvas, { x: 0, y: 0, width: 5, height: 5 });
-
+    const player = new Player(canvas, { x: 250, y: 650, width: 20, height: 20 });
     const player2 = new Player(canvas, { x: 150, y: 150, width: 9, height: 9 });
-    const player3 = new Player(canvas, { x: 300, y: 500, width: 150, height: 150 });
+    const player3 = new Player(canvas, { x: 350, y: 500, width: 300, height: 300 });
 
     canvas.addObject(player);
     canvas.addObject(player2);
