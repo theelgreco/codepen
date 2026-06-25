@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+        <title>AURORA — multitouch MPE instrument</title>
+        <link rel="stylesheet" href="aurora/style.css" />
+    </head>
+    <body>
+        <canvas id="surface"></canvas>
+
+        <!-- Top toolbar -->
+        <header class="hud">
+            <div class="brand">
+                <span class="logo"></span>
+                <div class="titles">
+                    <h1>AURORA</h1>
+                    <p>multitouch&nbsp;·&nbsp;expressive MPE surface</p>
+                </div>
+            </div>
+            <div class="controls">
+                <div class="group">
+                    <label>Voice</label>
+                    <div class="seg" id="timbreSeg"></div>
+                </div>
+                <div class="group">
+                    <label>Scale</label>
+                    <div class="seg" id="scaleSeg"></div>
+                </div>
+                <div class="group">
+                    <label>Root</label>
+                    <select id="rootSel"></select>
+                </div>
+            </div>
+        </header>
+
+        <!-- Legend / live readout -->
+        <footer class="legend">
+            <div class="axis"><b>X</b> pitch</div>
+            <div class="axis"><b>Y</b> brightness</div>
+            <div class="axis"><b>press</b> dynamics</div>
+            <div class="readout" id="readout">— idle —</div>
+        </footer>
+
+        <!-- Start overlay: WebAudio needs a real (trusted) gesture to unlock -->
+        <div class="overlay" id="overlay">
+            <div class="card">
+                <div class="ring"></div>
+                <h2>AURORA</h2>
+                <p>
+                    An expressive instrument played with raw trackpad multitouch. Every finger is its
+                    own voice — <b>slide</b> for pitch, <b>press</b> for dynamics, ride <b>up</b> for
+                    brightness. Lay down several fingers to play chords.
+                </p>
+                <button id="startBtn">Tap to begin</button>
+                <small>headphones recommended · best with a Force&nbsp;Touch trackpad</small>
+            </div>
+        </div>
+
+        <script src="aurora/script.ts"></script>
+    </body>
+</html>
