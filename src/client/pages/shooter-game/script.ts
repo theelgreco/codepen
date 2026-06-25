@@ -259,9 +259,9 @@ export class GameCanvas extends DrawCanvas {
 function main() {
     const canvas = new GameCanvas("canvas");
 
-    const player = new Player(canvas, { x: 250, y: 650, width: 20, height: 20 });
+    const player = new Player(canvas, { x: 450, y: canvas.CANVAS_HEIGHT - 500, width: 20, height: 20 });
     const player2 = new Player(canvas, { x: 150, y: 150, width: 9, height: 9 });
-    const player3 = new Player(canvas, { x: 350, y: 500, width: 300, height: 300 });
+    const player3 = new Player(canvas, { x: 350, y: 0, width: 300, height: 300 });
 
     canvas.addObject(player);
     canvas.addObject(player2);

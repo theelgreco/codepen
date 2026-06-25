@@ -4,12 +4,6 @@ document.body.addEventListener("mousedown", async () => {
     await document.body.requestPointerLock();
 });
 
-window.addEventListener("message", (event) => {
-    if (event.data.type === "trackpad") {
-        window.dispatchEvent(new CustomEvent("trackpad", { detail: event.data.data }));
-    }
-});
-
 window.addEventListener(
     "wheel",
     (e) => {
